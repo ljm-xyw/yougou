@@ -1,0 +1,135 @@
+$(function(){
+    var myScrollLeft;
+    var myScrollRight;
+    var Aindex=1;
+    myScrollLeft = new IScroll('#brandShopWrapLeft', { 
+        // scrollbars: true,
+        mouseWheel: true,
+        interactiveScrollbars: false,
+        shrinkScrollbars: 'clip',
+        // fadeScrollbars: true,
+        click: true
+    });
+    window.onload=function(){
+      $('#brandShopWrapLeft li').eq(0).addClass('shover');
+        $('#brandShopWrapLeft li').click(function(){
+            var _this=$(this);
+            var index=_this.index();            
+            var iscrollName='#brandShopWrapLeft li:nth-child('+(index+1)+')';
+            Aindex=index+1;      
+            if(index != 0){
+                var getClassifyId=_this.attr('classsifyId');
+                if($('#brandShopRight brandShopRightCon').eq(index).html()==''|| $('#brandShopRight brandShopRightCon').eq(index).html()==null){
+                    $.ajax({
+                        type: 'POST',
+                        url: context+'/getClassifies.sc',
+                        data: {
+                             id: getClassifyId,
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            var xxx=data.cls;
+                            var ccc=data.ads;
+                            var getDate=[];
+                            getDate.push('<div class="brandShopRightCon brandShow brandClassify">')
+                            if(ccc != ""){
+                                //console.log(ccc);
+                                for(var o in ccc){
+                                    if(ccc[o].position == 0){
+                                        if(typeof(ccc[o].imgUrl) === 'undefined' || (typeof(ccc[o].imgUrl) != 'undefined' && ccc[o].imgUrl == '')){
+                                            ccc[o].imgUrl='/images/defaluth.jpg';
+                                        }
+                                        if(typeof(ccc[o].type) != 'undefined'){
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck bannerBox"><a href="javascript:;"  class="reflinks linkRe" appType="'+ccc[o].type+'" commonId="'+ccc[o].categoryId+'"  linkurl="'+ccc[o].url+'" ><img src="'+ccc[o].imgUrl+'" /></a></div>');
+                                        }else{
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck"><a href="javascript:;"  class="reflinks"  ><img src="'+ccc[o].imgUrl+'" /></a></div>');
+                                        } 
+                                    }
+                                }
+                            }
+                            for(var o in xxx){
+                            if(typeof(xxx[o].pic) == 'undefined' || xxx[o].pic == '' || xxx[o].pic == null || typeof(xxx[o].pic) == 'null'){
+                                    getDate.push('<div class="classifyTitle refcheck"><a href="javascript:;"  class="reflinks"><p>'+xxx[o].name+'</p></a></div>');
+                                }else{
+                                    //console.log('ss'  + xxx[o].pic + 'ss');
+                                    getDate.push('<div class="classifyTitle refcheck"><a href="javascript:;"  class="reflinks"><p><img src="/images/default_fl.png" alt="" />'+xxx[o].name+'</p></a></div>');
+                            }
+                              
+                            for(var ooo in xxx[o].adBanners){
+                                if(xxx[o].adBanners[ooo].position == 0){
+                                    if(typeof(xxx[o].adBanners[ooo].imgUrl) === 'undefined' || (typeof(xxx[o].adBanners[ooo].imgUrl) != 'undefined' && xxx[o].adBanners[ooo].imgUrl == '')){
+                                        xxx[o].adBanners[ooo].imgUrl='/images/defaluth.jpg';
+                                    }
+                                    if(typeof(xxx[o].adBanners[ooo].type) != 'undefined'){
+                                        getDate.push('<div class="brandShopBanner topW list1 refcheck bannerBox"><a href="javascript:;"  class="reflinks linkRe" appType="'+xxx[o].adBanners[ooo].type+'" commonId="'+xxx[o].adBanners[ooo].categoryId+'"  linkurl="'+xxx[o].adBanners[ooo].url+'" ><img src="'+xxx[o].adBanners[ooo].imgUrl+'" /></a></div>');
+                                    }else{
+                                        getDate.push('<div class="brandShopBanner topW list1 refcheck"><a href="javascript:;"  class="reflinks"  ><img src="'+xxx[o].adBanners[ooo].imgUrl+'" /></a></div>');
+                                    }
+                                  
+                                }
+                            }
+                            getDate.push('<div class="ulW refcheck"><ul class="brandShopListUl brandShopListUlRe clearfix">');
+                            for(var oo in xxx[o].thrCls){
+                                if(typeof(xxx[o].thrCls[oo].skiptype) != 'undefined'){
+                                    if(typeof(xxx[o].thrCls[oo].pic) === 'undefined' || (typeof(xxx[o].thrCls[oo].pic) != 'undefined' && xxx[o].thrCls[oo].pic == '')){
+                                        xxx[o].thrCls[oo].pic='/images/default_fl.png';
+                                    }
+                                    if(xxx[o].thrCls[oo].skiptype == 1004){
+                                        getDate.push('<li><a href="javascript:;" commonId="'+xxx[o].thrCls[oo].categoryId+'" linkurl="'+xxx[o].thrCls[oo].url+'" appType="'+xxx[o].thrCls[oo].skiptype+'" class="reflinks linkRe"><img src="'+xxx[o].thrCls[oo].pic+'" /><span>'+xxx[o].thrCls[oo].name+'</span></a></li>');
+                                    }else{
+                                        getDate.push('<li><a href="javascript:;" commonId="'+xxx[o].thrCls[oo].url+'" linkurl="'+xxx[o].thrCls[oo].url+'" appType="'+xxx[o].thrCls[oo].skiptype+'" class="reflinks linkRe"><img src="'+xxx[o].thrCls[oo].pic+'" /><span>'+xxx[o].thrCls[oo].name+'</span></a></li>');
+                                    }
+                                }
+                            }
+                            getDate.push('</ul></div>')
+                                for(var ooo in xxx[o].adBanners){
+                                    if(xxx[o].adBanners[ooo].position == 1){
+                                        if(typeof(xxx[o].adBanners[ooo].imgUrl) === 'undefined' || (typeof(xxx[o].adBanners[ooo].imgUrl) != 'undefined' && xxx[o].adBanners[ooo].imgUrl == '')){
+                                            xxx[o].adBanners[ooo].imgUrl='/images/defaluth.jpg';
+                                        }
+                                        if(typeof(xxx[o].adBanners[ooo].type) != 'undefined'){
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck bannerBox"><a href="javascript:;"  class="reflinks linkRe" appType="'+xxx[o].adBanners[ooo].type+'" commonId="'+xxx[o].adBanners[ooo].categoryId+'"  linkurl="'+xxx[o].adBanners[ooo].url+'" ><img src="'+xxx[o].adBanners[ooo].imgUrl+'" /></a></div>');
+                                        }else{
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck"><a href="javascript:;"  class="reflinks"  ><img src="'+xxx[o].adBanners[ooo].imgUrl+'" /></a></div>');
+                                        }
+                                    }
+                                }
+                            }
+                            if(ccc != ""){
+                                for(var o in ccc){
+                                    if(ccc[o].position == 1){
+                                        if(typeof(ccc[o].imgUrl) === 'undefined' || (typeof(ccc[o].imgUrl) != 'undefined' && ccc[o].imgUrl == '')){
+                                            ccc[o].imgUrl='/images/defaluth.jpg';
+                                        }
+                                        if(typeof(ccc[o].type) != 'undefined'){
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck bannerBox"><a href="javascript:;"  class="reflinks linkRe" appType="'+ccc[o].type+'" commonId="'+ccc[o].categoryId+'"  linkurl="'+ccc[o].url+'" ><img src="'+ccc[o].imgUrl+'" /></a></div>');
+                                        }else{
+                                            getDate.push('<div class="brandShopBanner topW list1 refcheck"><a href="javascript:;"  class="reflinks"  ><img src="'+ccc[o].imgUrl+'" /></a></div>');
+                                        } 
+                                    }
+                                }
+                            }
+                            getDate.push('</div>');
+                            $('.brandShopRight').html(getDate.join(''));
+                            bannerLink(".linkRe");
+                            classifys(Aindex);
+                            myScrollLeft.scrollToElement(document.querySelector(iscrollName),300,true);
+                            _this.addClass('shover').siblings().removeClass('shover');
+                            $('.brandShopRight .brandShopRightCon').eq(index-1).removeClass('brandShow').eq(index-1).addClass('brandShow');
+                        }
+                    });
+                    myScrollLeft.scrollToElement(document.querySelector(iscrollName),300,true);
+                    _this.addClass('shover').siblings().removeClass('shover');
+                    $('.brandShopRight .brandShopRightCon').eq(index-1).removeClass('brandShow').eq(index-1).addClass('brandShow');
+                }else{
+                    myScrollLeft.scrollToElement(document.querySelector(iscrollName),300,true);
+                    _this.addClass('shover').siblings().removeClass('shover');
+                    $('.brandShopRight .brandShopRightCon').eq(index-1).removeClass('brandShow').eq(index-1).addClass('brandShow');
+                }
+            }else{
+                window.location.reload();
+            }
+           
+        })
+    }
+})

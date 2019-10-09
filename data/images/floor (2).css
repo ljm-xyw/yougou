@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+.floor-compontent-fixed {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99
+}
+
+.floor-wrapper .floor-item, .floor-change-list .floor-change-list-item {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 25%;
+    height: 100%
+}
+
+.floor-wrapper .floor-item .floor-item-icon, .floor-change-list .floor-change-list-item .floor-item-icon {
+    display: none;
+    width: 10px;
+    height: 12px;
+    padding-right: 3px
+}
+
+.floor-change-list .floor-change-list-item .floor-item-empty {
+    width: 10px;
+    height: 12px;
+    padding-right: 3px
+}
+
+.floor-wrapper .floor-item .floor-item-href, .floor-change-list .floor-change-list-item .floor-item-href {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: #333;
+    text-decoration: none
+}
+
+.floor-wrapper .floor-item.floor-item__active .floor-item-icon, .floor-change-list .floor-change-list-item.floor-item__active .floor-item-icon {
+    display: block
+}
+
+.floor-change-list .floor-change-list-item.floor-item__active .floor-item-empty {
+    display: none
+}
+
+.floor-wrapper .floor-item.floor-item__active .floor-item-href, .floor-change-list .floor-change-list-item.floor-item__active .floor-item-href {
+    color: #fd4765 !important
+}
+
+.floor-compontent {
+    position: relative;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 0 6px #000;
+}
+
+.floor-compontent .floor-wrapper {
+    width: 100%;
+    height: 33px;
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+
+.floor-compontent .floor-dropdown {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 33px;
+    height: 33px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    background: #fff;
+    border-left: 1px solid #d8d8d8
+}
+
+.floor-compontent .floor-dropdown .floor-dropdown-icon {
+    width: 13px;
+    height: 14px
+}
+
+.floor-compontent .floor-spread {
+    display: none;
+    background: #fff
+}
+
+.floor-compontent .floor-spread .floor-spread-change {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 33px;
+    width: 100%
+}
+
+.floor-compontent .floor-spread .floor-spread-change .floor-spread-change-title {
+    -webkit-box-flex: 1;
+    flex: 1;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: #999;
+    margin-left: 16px
+}
+
+.floor-compontent .floor-spread .floor-spread-change .floor-spread-change-dropup {
+    height: 100%;
+    width: 33px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    border-left: 1px solid #d8d8d8
+}
+
+.floor-compontent .floor-spread .floor-spread-change .floor-spread-change-dropup .floor-spread-change-dropup-icon {
+    width: 13px;
+    height: 14px
+}
+
+.floor-compontent .floor-spread .floor-change-list {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    background: rgba(216, 216, 216, 0.1);
+    width: 100%
+}
+
+.floor-compontent .floor-spread .floor-change-list::after {
+    content: "";
+    -webkit-box-flex: 1;
+    flex: auto
+}
+
+.floor-compontent .floor-spread .floor-change-list .floor-change-list-item {
+    height: 33px
+}

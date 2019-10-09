@@ -1,0 +1,386 @@
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
+var Request = new Object();
+Request = GetRequest();
+var nodes = Request['node'];
+if(nodes==undefined||nodes==null){
+	nodes="";
+}else{
+	nodes=nodes;		
+}
+var addSearchTop={		
+    screenW:$(window).width(),
+    screenH:$(window).height(),
+    searchLoad:true,//搜索开关避免重复加载
+    initLoad:function(){
+        $('#ygIndexTopS').val('');//默认清空搜索框
+        addSearchTop=this;
+       // addSearchTop.indexSeacher();
+       // addSearchTop.brandScroll();
+    },
+    connectS:function(){
+    	var n="";    	
+    },
+    indexSeacher:function(){//搜索弹窗
+         $('#ygIndexTopS').focus(function(){          	 
+        	 addSearchTop.seachIn();
+             setTimeout(function(){
+                 window.scrollTo(0,0);
+             },100)
+            
+         });
+         $('.ygIndexTopL').click(function(){       
+        	if($('.ygIndexTop').hasClass('ygIndexTopShow')){
+            	//if($('#krwChannelId').length<=0){                	
+                     $('#indexSeacher').hide();
+                     $('.brandShopWrap').show();
+                     $(".srchCon").show();
+                     $('.ygIndexMenu').show(); 
+                     $('.topnewback').show();
+                     $('.sitebar').show();
+                     /*针对输入框做的样式*/
+                     $("#ygnavmenu").hide();
+                     $(".brandShopRight").css("top","0");
+         			$(".brandShopLeft").css("transform","translateY(0)");
+                     $(".mallSearchform").css("width","70%");
+                     //-------搜索新版 start
+                     // if(!$('.ygIndexTop').hasClass('ygIndexTopNew')){
+                     //     $('.ygIndexTop').addClass('ygIndexTopNew');
+                     // }
+                     // $('.ygIndexTopImg').show(); 
+                     // //$('.ygIndexTopNew .ygIndexTopL').html('<a href="'+context+'/seoul?flag=2">海外购</a>'); 
+                     // if(openApp_header_hide!="false" && openApp_header_hide){
+                     //     $('#openApp_header').show();   
+                     //     $('#appDownWrap').show();       
+                     // }
+                     //-------搜索新版 end
+                     $('.ygIndexTop').removeClass('ygIndexTopShow');
+                     $('#ygIndexTopS').val('');
+                     $('#resetInput').hide();
+                     $('body').removeClass('bodyF');
+                     //$('.indexSeacherW').show();
+                     //$('.searchGetSame .searchGetSameUl').html('');
+                     $('.searchGetSame').hide();
+                     $('.indexSeacherW').show();
+                    // $('.ygIndexTopSubNo').addClass('ygIndexTopSub').removeClass('ygIndexTopSubNo');                   
+                 }
+             //}                 
+             $(".ygIndexTopSub").hide();
+             $(".ygIndexTopSubNo").show();
+         });
+         $('.ygIndexTopSub').on('click',function(){        	
+             $('#ygIndexTopS').focus();            
+             var kword=$.trim($("#ygIndexTopS").val());                 
+             if(kword==""){
+            	 if(nodes=="A_PP"){
+            		 var node='A_SSPP_null';
+            	 }else if(nodes=="A_FL"){
+            		 var node='A_SSFL_null';
+            	 }else{
+            		 var node='A_SSZTLB_null';
+            	 }
+               }else{                  
+                  if(nodes=="A_PP"){
+                	  var node='A_SSPP_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+             	  }else if(nodes=="A_FL"){
+             		 var node='A_SSFL_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+             	  }else{
+             		 var node='A_SSZTLB_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+             	 }
+              }
+             $("#searchnode").val(node);
+             addSearchTop.submitForm();
+             //ygIndexF.seachIn();
+             _hmt.push(['_trackEvent', '搜索页，搜索按钮', 'click', 'seacherSubmit']);
+         });
+         $('#ygIndexTopS').keyup(function(e){
+             if($('#krwChannelId').length===0){
+                 addSearchTop.ygSearchKeyDown()
+             }
+             var kword=$.trim($("#ygIndexTopS").val()); 
+             if(kword!=''){
+                 $('#resetInput').show();
+             }else{
+                 $('#resetInput').hide();
+             }     
+             addSearchTop.connect(kword);      
+         });
+         document.onkeydown=function(event){
+             var e = event || window.event || arguments.callee.caller.arguments[0];                        
+              if(e && e.keyCode==13){ // enter 键
+            	  $('#ygIndexTopS').focus();            
+                  var kword=$.trim($("#ygIndexTopS").val());                 
+                  if(kword==""){
+                 	 if(nodes=="A_PP"){
+                 		 var node='A_SSPP_null';
+                 	 }else if(nodes=="A_FL"){
+                 		 var node='A_SSFL_null';
+                 	 }else{
+                 		 var node='A_SSZTLB_null';
+                 	 }
+                    }else{                  
+                       if(nodes=="A_PP"){
+                     	  var node='A_SSPP_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+                  	  }else if(nodes=="A_FL"){
+                  		 var node='A_SSFL_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+                  	  }else{
+                  		 var node='A_SSZTLB_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+                  	 }
+                   }
+                  $("#searchnode").val(node);
+                  addSearchTop.submitForm();
+                  _hmt.push(['_trackEvent', '搜索页，搜索按钮', 'enter', 'seacherSubmit']);
+             }
+         }; 
+         $('.ygIndexTopSubNo').on('click',function(){
+             // $('#ygIndexTopS').focus();
+             // ygIndexF.seachIn();
+             // $(".ygIndexTopSub").show();
+             // $(this).hide();
+        	 addSearchTop.submitForm();
+             _hmt.push(['_trackEvent', '搜索页，搜索按钮', 'click', 'seacherSubmit']);
+             return false;
+         })
+          $('#ygIndexTopS').focus(function(){           
+             $(".ygIndexTopSub").show();
+             $(".ygIndexTopSubNo").hide(); 
+             if($('#krwChannelId').length===0){
+                 //$('#resetInput').show();
+                 $('body').addClass('bodyF');
+                 addSearchTop.historySearchCon(); 
+                 $('#openApp_header').hide();
+                 $('#appDownWrap').hide();   
+             }
+             _hmt.push(['_trackEvent', '搜索页，搜索按钮', 'click', 'seacherSubmit']);
+             return false;
+         }) 
+         if($('#krwChannelId').length===0){
+             $('#resetInput').click(function(){
+                 $('#ygIndexTopS').val('').focus();
+                 $('.searchGetSame').hide();
+                 $('.indexSeacherW').show();
+             })
+             $('#searchClean').click(function(){
+            	 addSearchTop.deleteCookie('searchHistory');
+                 $('.searchHistoryUl').html('');
+                 $('.searchHistory').hide();
+             })
+         }   
+     },
+     seachIn:function(){    	 
+         $('.brandShopWrap').hide();
+         $('#indexSeacher').show();
+         $('.ygIndexMenu').hide();
+         /*添加搜索框*/
+         $('.topnewback').hide();
+         $('.sitebar').hide();
+         $(".mallSearchform").css("width","85%");
+         $(".srchCon").hide();    
+         $("#ygnavmenu").hide();
+         /*结束*/
+         $('.ygIndexTop').addClass('ygIndexTopShow');      
+     },
+     historySearchCon:function(){//历史搜索显示 cookie存储在10条记录
+         if(addSearchTop.getCookie('searchHistory')){
+             var currentText = addSearchTop.getCookie('searchHistory');  
+             //console.log(currentText)
+             var getHistoryDate = addSearchTop.searchCodeType(addSearchTop.getCookie('searchHistory'));  
+             getHistoryDate=getHistoryDate.split('|');
+             getHistoryDate=getHistoryDate.reverse();
+             var dateSearchArr=[];
+             var dateSearchArrNew=[];
+             for(var p=0;p<getHistoryDate.length;p++){
+                 if(dateSearchArrNew.indexOf(getHistoryDate[p])==-1){
+                     dateSearchArrNew.push(getHistoryDate[p]);
+                 }
+             }
+             dateSearchArrNew=dateSearchArrNew.splice(0,10);
+             var dateSearchArrNewL=dateSearchArrNew.length;
+             for(var t=0;t<dateSearchArrNewL;t++){
+                 dateSearchArr.push('<li><a href=\"javascript:addSearchTop.mallClickKeywordhis(\''+dateSearchArrNew[t]+'\');\">'+dateSearchArrNew[t]+'</a></li>');
+             }
+             $('.searchHistoryUl').html(dateSearchArr.join(''));
+             $('.searchHistory').show();
+             if(dateSearchArrNew.length>=10){
+                 dateSearchArrNew=dateSearchArrNew.reverse();
+                 dateSearchArrNew=dateSearchArrNew.join('|');
+                 addSearchTop.setCookie('searchHistory',dateSearchArrNew,1000);
+             }
+         }else{
+             $('.searchHistoryUl').html('');
+             $('.searchHistory').hide();
+         }
+     },
+     searchCodeType:function(searchCode){//中文编码转换
+         var currentText = searchCode;
+         var newText = "";
+         if (currentText != null && currentText != "" && currentText != "undefined"){
+            newText = decodeURIComponent(currentText);
+         }
+         return newText;
+     },
+     mallClickKeyword:function(num,kword){//关键字点击        
+         $("#ygIndexTopS").val(kword);           
+         if(nodes=="A_PP"){       	   
+       	      var node='A_SSPP_LXC_'+n+"_WZ"+(num+1)+"_"+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+    	  }else if(nodes=="A_FL"){
+    		  var node='A_SSFL_LXC_'+n+"_WZ"+(num+1)+"_"+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+    	  }else{
+    		  var node='A_SSZTLB_LXC_'+n+"_WZ"+(num+1)+"_"+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+    	 }
+         $("#searchnode").val(node);
+         addSearchTop.submitForm();
+     },
+     mallClickKeywordhis:function(kword){//关键字点击    	    	
+     	$("#ygIndexTopS").val(kword);          	
+     	var node='A_SS_'+escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  
+         $("#searchnode").val(node);
+         addSearchTop.submitForm();
+     },
+     mallClickKeywordss:function(num,kword){//关键字点击
+         $("#ygIndexTopS").val(kword);
+         var kwords=$.trim($("#ygIndexTopS").val());
+          if(nodes=="A_PP"){
+        	 var node='A_PP_SSWZ'+(num+1)+'_'+escape(kwords).toLocaleLowerCase().replace(/%u/gi, '\\u');
+    	  }else if(nodes=="A_FL"){
+    		  var node='A_FL_SSWZ'+(num+1)+'_'+escape(kwords).toLocaleLowerCase().replace(/%u/gi, '\\u');
+    	  }else{
+    		  var node='A_ZTLB_SSWZ'+(num+1)+'_'+escape(kwords).toLocaleLowerCase().replace(/%u/gi, '\\u');
+    	 }
+         $("#searchnode").val(node);
+         addSearchTop.submitForm();
+     },    
+     submitForm:function(){
+         var searchKword=$.trim($("#ygIndexTopS").val());
+         if(searchKword==''){
+             // var placeHolder=$('#ygIndexTopS').attr('placeholder');
+             // $('#ygIndexTopS').val(placeHolder);
+             // if($('#krwChannelId').length<=0){
+             //     window.location.href='http://m.yougou.com/t-02370f509b6f46b581aa287ebb5f81e7?node=A_SS_null';
+             // }else{
+             //     document.mallSearchform.submit(); 
+             // }
+             document.mallSearchform.submit(); 
+         }else{
+             var submitFormV=$.trim($("#ygIndexTopS").val());
+             if(addSearchTop.getCookie('searchHistory')){
+                 var ygSearchValue=addSearchTop.searchCodeType(addSearchTop.getCookie('searchHistory'))+'|'+submitFormV;
+                 addSearchTop.setCookie('searchHistory',ygSearchValue,1000);
+             }else{
+            	 addSearchTop.setCookie('searchHistory',submitFormV,1000);
+             }
+             $('#keyword').val(submitFormV);
+             //$("#mallSearchform").attr("action",$("#mallSearchform").attr("action") + "&?keyword=" + submitFormV.replace(new RegExp(" ","gm"),"+"));//同步pcURL用
+             document.mallSearchform.submit(); 
+         }
+     },
+     ygSearchKeyDown:function(){//搜索文本框事件
+         //ygIndexF.initV=$.trim($('#ygIndexTopS').val())
+         var getKeyValue=$.trim($('#ygIndexTopS').val());
+         $('.searchGetSameUl').html('');
+         //$('.searchHistoryT').html(getKeyValue)
+         if(getKeyValue!=""){
+             $('.indexSeacherW').hide();
+             $('.searchGetSame').show();
+             if(addSearchTop.searchLoad){
+            	 addSearchTop.searchLoad=false;
+                 $.ajax({
+                     type:'post',
+                     url:context+'/suggWord.sc?kword='+getKeyValue,
+                     dataType:'json',
+                     success:function(date){
+                         if(date.length>0){
+                             var dateArr=[];
+                             for(var i=0;i<date.length;i++){
+                                 dateArr.push('<li><a href=\"javascript:addSearchTop.mallClickKeyword('+i+',\''+date[i].suggest+'\');\"><span>'+date[i].count+'个结果</span>'+date[i].suggest+'</a></li>');
+                             }
+                             $('.searchGetSameUl').html(dateArr.join(''));
+                             $('.searchGetSame').show();
+                         }else{
+                             $('.searchGetSameUl').html('');
+                             $('.searchGetSame').hide();
+                         }
+                         addSearchTop.searchLoad=true;
+                         if(getKeyValue!=$.trim($('#ygIndexTopS').val())){
+                        	 addSearchTop.ygSearchKeyDown();
+                         }
+                         //$('.searchHistoryT').html($('#ygIndexTopS').val())
+                         //console.log(getKeyValue!=$.trim($('#ygIndexTopS').val()));
+                     }
+                 })
+             }
+         }else{
+             $('.searchGetSame').hide();
+             $('.indexSeacherW').show();
+         }
+     },
+     searchHotWord:function(hotWord){//关键字
+         if(typeof(hotWord) !='undefined'){
+//        	 hotWord=hotWord.replace('[','').replace(']','').replace('\"','');
+//             hotWord=hotWord.substring(0,hotWord.length-1);
+//             hotWord=hotWord.split('","');
+        	 hotWord = eval(hotWord);
+             if(hotWord.length>1){
+                 var searchHotsy=[];
+                 for(var i=0;i<hotWord.length;i++){
+                     searchHotsy.push('<li><a href="javascript:addSearchTop.mallClickKeywordsy('+i+',\''+hotWord[i]+'\');">'+hotWord[i]+'</a></li>');
+                 }
+                 var searchHot=[];
+                 for(var i=0;i<hotWord.length;i++){
+                     searchHot.push('<li><a href="javascript:addSearchTop.mallClickKeywordss('+i+',\''+hotWord[i]+'\');">'+hotWord[i]+'</a></li>');
+                 }
+                 $('.indexSeacherHotUlT').html(searchHotsy.join(''));
+                 $('.indexSeacherHotUlS').html(searchHot.join(''));
+             }else{
+                 $('.indexSeacherHot').hide();
+                 $('.searchHistory').addClass('searchHistoryBNo');
+             }
+         }
+//         if(searchUpImg!=''){
+//             $('.ygIndexTopImg img').attr('src',searchUpImg);
+//             $('.ygIndexTopImg').find('a').attr('href',searchUpImgLink);
+//             $('.ygIndexTopImg').addClass('ygIndexTopImgNew');
+//         }else{
+//             $('.ygIndexTopImg img').attr('src',context+'/images/index_logo.png');
+//         }
+     },
+     setCookie:function(name,value,time){
+         var cookieString=name+"="+encodeURI(value); 
+         //判断是否设置过期时间默认是小时
+         if(time>0){ 
+             var date=new Date(); 
+             date.setTime(date.getTime+time*3600*1000); 
+             cookieString=cookieString+"; expires="+date.toGMTString(); 
+         } 
+         document.cookie=cookieString; 
+     },
+     getCookie:function(name){
+         var strCookie=document.cookie; 
+         var arrCookie=strCookie.split("; "); 
+         for(var i=0;i<arrCookie.length;i++){ 
+             var arr=arrCookie[i].split("="); 
+             if(arr[0]==name)return arr[1]; 
+         } 
+         return false; 
+     },
+     deleteCookie:function(name){
+         var date=new Date(); 
+         date.setTime(date.getTime()-10000);
+         document.cookie=name+"=v; expires="+date.toGMTString(); 
+     },
+    /*联想词*/
+    connect:function(kword){	
+		n=escape(kword).toLocaleLowerCase().replace(/%u/gi, '\\u');  ;
+	}
+
+}
