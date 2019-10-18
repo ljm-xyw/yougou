@@ -1,0 +1,28 @@
+{
+  "cart":[
+    {
+      "brand":"百丽优购",
+      "title":"Belle/百丽专柜同款牛皮革马丁靴",
+      "src":"./data/images/i19.jpg",
+      "color":"颜色：黑单里",
+      "size":"尺码：36",
+      "from":"发货：百丽优购",
+      "price":562,
+      "num":1,
+      "id":0,
+      "checked":false
+    },
+    {
+      "brand":"百丽优购",
+      "title":"Belle/百丽专柜同款休闲鞋",
+      "src":"./data/images/100918032_01_mb.jpg",
+      "color":"颜色：白色",
+      "size":"尺码：36",
+      "from":"发货：百丽优购",
+      "price":318,
+      "num":1,
+      "id":1,
+      "checked":false
+    }
+  ]
+}

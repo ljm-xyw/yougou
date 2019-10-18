@@ -1,0 +1,309 @@
+/**
+ * 神策数据接入
+ * @author liuwei
+ * @date 2018-10-12
+ * 神策最新版本js-sdk
+ * ----------------注意：正式环境需修改server_url-------------------------------------------------------
+ */
+
+(function (para) {
+    var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script', x = null, y = null;
+    w['sensorsDataAnalytic201505'] = n;
+    w[n] = w[n] || function (a) {
+        return function () {
+            (w[n]._q = w[n]._q || []).push([a, arguments]);
+        }
+    };
+    var ifs = ['track', 'quick', 'register', 'registerPage', 'registerOnce', 'trackSignup', 'trackAbtest', 'setProfile', 'setOnceProfile', 'appendProfile', 'incrementProfile', 'deleteProfile', 'unsetProfile', 'identify', 'login', 'logout', 'trackLink', 'clearAllRegister', 'getAppStatus'];
+    for (var i = 0; i < ifs.length; i++) {
+        w[n][ifs[i]] = w[n].call(null, ifs[i]);
+    }
+    if (!w[n]._t) {
+        x = d.createElement(s), y = d.getElementsByTagName(s)[0];
+        x.async = 1;
+        x.src = p;
+        x.setAttribute('charset', 'UTF-8');
+        y.parentNode.insertBefore(x, y);
+        w[n].para = para;
+    }
+})({
+    sdk_url: 'http://static.sensorsdata.cn/sdk/1.11.2/sensorsdata.min.js',
+    heatmap_url: 'http://static.sensorsdata.cn/sdk/1.11.2/heatmap.min.js',
+    name: 'sensors',
+    // * ----------------注意：正式环境需修改server_url-------------------------------------------------------
+    // 正式地址
+     server_url: 'http://baili.cloud.sensorsdata.cn:8006/sa?token=ed55f543bb6ab808&project=yougou',
+    // 测试地址
+    //server_url: 'http://baili.cloud.sensorsdata.cn:8006/sa?token=ed55f543bb6ab808',
+    heatmap: {}
+});
+sensors.quick('autoTrack');
+
+var ModuleNameByID = {
+    101: '轮播图',
+    23: '促销轮播',
+    102: '推荐功能模块',
+    108: '自定义功能模块',
+    1: '模块1',
+    2: '模块2',
+    3: '模块3',
+    4: '模块4',
+    5: '模块5',
+    6: '模块6',
+    7: '模块7',
+    8: '模块8',
+    9: '模块9',
+    10: '模块10',
+    11: '模块11',
+    104: '优购快报',
+    12: '商品列表4栏',
+    15: '商品列表3栏',
+    16: '商品列表2栏',
+    103: 'webview',
+    18: '秒杀',
+    20: '倒计时',
+    21: '新品品牌',
+    22: '为你推荐',
+    24: '秒杀2组件'
+};
+
+/**
+ * 神策公共属性
+ */
+sensors.registerPage({
+    platForm: 'h5'
+});
+
+/**
+ * pagemodel_click事件埋点
+ */
+function track(modeltype, modeldetailseat, pagelink, modelcontenseat, modelcontenttype, modellink) {
+    // 追踪浏览商品事件。
+    sensors.track('pagemodel_click', {
+        modeltype: modeltype,  // 组件类型
+        modeldetailseat: modeldetailseat,  // 组件页面位置
+        pagelink: pagelink,                 // 页面ID
+        modelcontentseat: parseInt(modelcontenseat) + 1,  // 组件内容位置
+        modelcontenttype: modelcontenttype,   // 组件内容类型
+        modellink: modellink                    // 组件内容ID
+    });
+}
+
+/**
+ * 秒杀组件埋点
+ */
+$(".sen-seckill").delegate("a", "click", function () {
+    var $root = $(".sen-seckill");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 为你推荐
+ */
+$(".sen-recommend").delegate("a", "click", function () {
+    var length = $(".sen-recommend").length;
+    var $root = $(".sen-recommend");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 为你推荐-TAB标题-li
+ */
+$(".sen-recommend").delegate("li", "click", function () {
+    var $root = $(".sen-recommend");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("data-title");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "标题", modellik);
+});
+
+/**
+ * 为你推荐-TAB标题-换一换-span
+ */
+$(".sen-recommend .changeBtn-wrap").delegate("span", "click", function () {
+    var $root = $(".sen-recommend");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = 0;
+    var modellik = $(this).attr("data-title");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "标题", modellik);
+});
+
+/**
+ * 新品品牌-图片
+ */
+$(".sen-new-brand .brandArea-item .sen-new-brand-img").delegate("a", "click", function () {
+    var $root = $(".sen-new-brand");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = 0;
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 新品品牌-商品
+ */
+$(".sen-new-brand .commodity-area").delegate("a", "click", function () {
+    var $root = $(".sen-new-brand");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 新品品牌-标题-查看更多
+ */
+$(".sen-new-brand .more-area").delegate("a", "click", function () {
+    var $root = $(".sen-new-brand");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = 0;
+    var modellik = "查看更多";
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "标题", modellik);
+});
+
+/**
+ * 自定义模块
+ */
+$(".sen-custom").delegate("a", "click", function () {
+    var length = $(".sen-custom").length;
+    var $root = $(".sen-custom");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 秒杀活动
+ */
+$(".sen-seckill").delegate("a", "click", function () {
+    var length = $(".sen-seckill").length;
+    var $root = $(".sen-seckill");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 新推荐组件
+ */
+$(".sen-new-recommend").delegate("a", "click", function () {
+    var length = $(".sen-new-recommend").length;
+    var $root = $(".sen-new-recommend");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 商品列表3栏
+ */
+$(".sen-new-hot").delegate("a", "click", function () {
+    var length = $(".sen-new-hot").length;
+    var $root = $(".sen-new-hot");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 商品列表3栏
+ */
+$(".sen-new-module").delegate("a", "click", function () {
+    var length = $(".sen-new-module").length;
+    var $root = $(".sen-new-module");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 快报新闻
+ */
+$(".sen-news").delegate("a", "click", function () {
+    var length = $(".sen-news").length;
+    var $root = $(".sen-news");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 全屏banner
+ */
+$(".sen-banner").delegate("a", "click", function () {
+    var length = $(".sen-banner").length;
+    var $root = $(".sen-banner");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 推荐组件
+ */
+$(".sen-recommend-model").delegate("a", "click", function () {
+    var length = $(".sen-recommend-model").length;
+    var $root = $(".sen-recommend-model");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "商品", modellik);
+});
+
+/**
+ * 促销轮播
+ */
+$(".sen-lunbo-sec").delegate("a", "click", function () {
+    var length = $(".sen-lunbo-sec").length;
+    var $root = $(".sen-lunbo-sec");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 轮播
+ */
+$(".sen-lunbo").delegate("a", "click", function () {
+    var length = $(".sen-lunbo").length;
+    var $root = $(".sen-lunbo");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * webview
+ */
+$(".sen-webview").delegate("a", "click", function () {
+    var $root = $(".sen-webview");
+    var modeltype = $root.find("input[name='boardStyle']").val();
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
+
+/**
+ * 模块1到模块11
+ */
+$(".sen-module").delegate("a", "click", function () {
+    var modeltype = $(this).parents("section").attr("data-num");
+    var modelcontenseat = $(this).attr("data-index");
+    var modellik = $(this).attr("href");
+    track(ModuleNameByID[modeltype], '首页', '首页', modelcontenseat, "图片", modellik);
+});
