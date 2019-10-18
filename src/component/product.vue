@@ -307,10 +307,10 @@
 			  list:['黑单里','黑绒里'],
 			  img:[
 				  {
-					 "src":"../../data/images/pro1.jpg" 
+					 "src":"./data/images/pro1.jpg" 
 				  },
 				  {
-					  "src":"../../data/images/pro2.jpg"
+					  "src":"./data/images/pro2.jpg"
 				  }
 			  ],
 			  opsize:['33','34','35','36','37','38','39','40']	  

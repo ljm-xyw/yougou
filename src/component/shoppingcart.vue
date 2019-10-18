@@ -209,6 +209,7 @@
 	.back li:nth-of-type(3) h6{
 		background:#f8f8f8;
 		font-weight: normal;
+		font-size: .9rem;
 	}
 	.back li:nth-of-type(4){
 	  width:15%;

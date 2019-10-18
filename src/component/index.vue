@@ -633,11 +633,11 @@
   .block u{
     text-decoration:none;
     color:#333;
-    font-size:.2rem;
+    font-size:.7rem;
   }
   .block del{
     color:#999;
-    font-size:.2rem;
+    font-size:.7rem;
   }
   .more{
     padding-top:3rem;

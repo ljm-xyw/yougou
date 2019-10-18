@@ -86,6 +86,9 @@
 	  font-size: 1.2rem;
 	  position:relative;
 	}
+	.back li:nth-of-type(2) h3{
+		font-weight: normal;
+	}
 	.back li:nth-of-type(3){
 	  width:10%;
 	  font-size: .1rem;
@@ -94,6 +97,9 @@
 	.back li:nth-of-type(3) a{
 		text-decoration: none;
 		color: #666;
+	}
+	.back li:nth-of-type(3) h6{
+		font-size: .9rem;
 	}
 	.back li:nth-of-type(4){
 	  width:15%;
@@ -127,7 +133,7 @@
 	}
 	.content h4 span:nth-of-type(1){
 		top:70%;
-		left: 30%;
+		left: 29%;
 	}
 	.content h4 span:nth-of-type(2){
 		top:70%;

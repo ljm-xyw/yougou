@@ -79,6 +79,8 @@
 		width: 85%;
 		height: 28px;
 		border:none;
+		box-sizing: border-box;
+		padding-left: 5px;
 	}
 	.back li:nth-of-type(2) input:nth-of-type(2){
 		width: 15%;

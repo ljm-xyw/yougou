@@ -93,10 +93,17 @@
 	  font-size: 1.2rem;
 	  position:relative;
 	}
+	.back li:nth-of-type(2) h3{
+		font-weight: normal;
+	}
 	.back li:nth-of-type(3){
 	  width:10%;
 	  font-size: .1rem;
 	  margin-top: .9rem;
+	}
+	.back li:nth-of-type(3) h6{
+		font-size: .9rem;
+		font-weight: normal;
 	}
 	.back li:nth-of-type(4){
 	  width:15%;
